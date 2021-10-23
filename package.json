@@ -9,8 +9,12 @@
   "keywords": [
     "rcon",
     "console",
-    "minecraft"
+    "minecraft",
+    "cli"
   ],
+  "bin": {
+    "rcon": "./rcon"
+  },
   "author": "bloomkd46",
   "license": "MIT",
   "dependencies": {
