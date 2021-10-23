@@ -13,12 +13,21 @@
     "cli"
   ],
   "bin": {
-    "rcon": "./rcon"
+    "rcon": "rcon"
   },
   "author": "bloomkd46",
   "license": "MIT",
   "dependencies": {
     "commander": "^8.3.0",
     "rcon": "^1.1.0"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bloomkd46/rcon-console.git"
+  },
+  "bugs": {
+    "url": "https://github.com/bloomkd46/rcon-console/issues"
+  },
+  "homepage": "https://github.com/bloomkd46/rcon-console#readme"
 }
