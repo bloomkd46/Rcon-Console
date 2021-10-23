@@ -13,7 +13,7 @@
     "cli"
   ],
   "bin": {
-    "rcon": "rcon"
+    "rcon": "./rcon.js"
   },
   "author": "bloomkd46",
   "license": "MIT",
