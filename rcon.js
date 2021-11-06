@@ -58,7 +58,7 @@ class rconConsole {
       }
       case 'rebuild': {
         console.log('Rebuilding...');
-        child_process.exec('npm install rcon-console', (error) => {
+        child_process.exec('npm install rcon-console -g', (error) => {
           if (error) {
             console.error(`exec error: ${error}`);
             return;
