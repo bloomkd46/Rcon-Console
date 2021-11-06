@@ -2,9 +2,10 @@
   "name": "rcon-console",
   "version": "1.0.2-0",
   "description": "A Node.js library for controlling an Rcon via the command line",
-  "main": "rcon.js",
+  "main": "./rcon.js",
   "scripts": {
-    "test": "echo test suceeded"
+    "test": "echo test suceeded",
+    "postversion": "npm publish && git push"
   },
   "keywords": [
     "rcon",
@@ -12,14 +13,21 @@
     "minecraft",
     "cli"
   ],
+  "engines": {
+    "node": "^12.20.0 || ^14.13.1 || >=16.0.0"
+  },
   "bin": {
     "rcon": "./rcon.js"
   },
   "author": "bloomkd46",
   "license": "MIT",
   "dependencies": {
+    "axios": "^0.24.0",
     "commander": "^8.3.0",
-    "rcon": "^1.1.0"
+    "ora": "^5.4.1",
+    "rcon": "^1.1.0",
+    "rcon-console": "^1.0.2-0",
+    "semver": "^7.3.5"
   },
   "repository": {
     "type": "git",
