@@ -1,34 +1,37 @@
-# node-rcon
+<span align="center">
 
-[![license](https://badgen.net/github/license/rcon-console/rcon-console?cache=300)](https://github.com/bloomkd46/rcon-console/blob/master/LICENSE.md)
+    
 
+[![terminal-icon](https://badgen.net/badge/icon/Rcon-Console?icon=terminal&label&scale=5&color=green)]()
+    
+[![version](https://badgen.net/npm/v/rcon-console?cache=300)](https://www.npmjs.com/package/rcon-console)
+[![downloads](https://badgen.net/npm/dt/rcon-console?cache=300&scale=1.15)](https://npmcharts.com/compare/rcon-console?minimal=true)
+[![license](https://badgen.net/github/license/micromatch/micromatch)](https://github.com/bloomkd46/rcon-console/blob/master/LICENSE.md)
+###
+    
 node-rcon is a simple library for connecting to RCON servers in node.js.
 It implements the protocol used by Valve's Source and GoldSrc engines,
-as well as many other game servers.
+as well as many other game servers. It was originally created to connect to Minecraft's RCON server.
 
-It was originally created to connect to Minecraft's RCON server.
+</span>
 
 ## Installation
 
 npm:
-
-    $ npm install rcon
-
+Make sure that you are running node.js 12.20.0 or newer (`node -v`)
+```shell
+npm install -g rcon-console
+```
 ## Usage
 
 See [`examples/basic.js`](https://github.com/pushrax/node-rcon/blob/master/examples/basic.js) for a simple example, or
 [`examples/stdio.js`](https://github.com/pushrax/node-rcon/blob/master/examples/stdio.js) for a complete command line client.
 
-Some games use TCP and some use UDP for their RCON implementation. To tell
-node-rcon which protocol to use, pass it an options object like so:
-
-```javascript
-var options = {
-  tcp: false,       // false for UDP, true for TCP (default true)
-  challenge: false  // true to use the challenge protocol (default true)
-};
-client = new Rcon(host, port, password, options);
-```
+### Commands And Options
+| Command | Description |
+| :-|- |
+| help | Display the help menu|
+| 
 
 Here's a non-exhaustive list of which games use which options:
 
@@ -48,6 +51,3 @@ request.
 Please submit a bug report for any game you try that doesn't work!
 
 Note that some servers may close the connection if it is idle for a long period of time.
-If your application may leave the connection idle for a long time, you can either create a
-new Rcon instance (and connection) each time you need it, or you can send a ping command
-periodically to keep the connection alive.
