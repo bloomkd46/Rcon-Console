@@ -18,24 +18,20 @@ as well as many other game servers. It was originally created to connect to Mine
 ## Installation
 
 npm:
-
-    $ npm install -g rcon-console
-
+Make sure that you are running node.js 12.20.0 or newer (`node -v`)
+```shell
+npm install -g rcon-console
+```
 ## Usage
 
 See [`examples/basic.js`](https://github.com/pushrax/node-rcon/blob/master/examples/basic.js) for a simple example, or
 [`examples/stdio.js`](https://github.com/pushrax/node-rcon/blob/master/examples/stdio.js) for a complete command line client.
 
-Some games use TCP and some use UDP for their RCON implementation. To tell
-node-rcon which protocol to use, pass it an options object like so:
-
-```javascript
-var options = {
-  tcp: false,       // false for UDP, true for TCP (default true)
-  challenge: false  // true to use the challenge protocol (default true)
-};
-client = new Rcon(host, port, password, options);
-```
+### Commands And Options
+| Command | Description |
+| :-|- |
+| help | Display the help menu|
+| 
 
 Here's a non-exhaustive list of which games use which options:
 
@@ -55,6 +51,3 @@ request.
 Please submit a bug report for any game you try that doesn't work!
 
 Note that some servers may close the connection if it is idle for a long period of time.
-If your application may leave the connection idle for a long time, you can either create a
-new Rcon instance (and connection) each time you need it, or you can send a ping command
-periodically to keep the connection alive.
