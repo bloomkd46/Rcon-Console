@@ -1,6 +1,6 @@
 # node-rcon
 
-[![license](https://badgen.net/github/license/rcon-console/rcon-console?cache=300)](github.com/bloomkd46/rcon-console/license.md)
+[![license](https://badgen.net/github/license/rcon-console/rcon-console?cache=300)](https://github.com/bloomkd46/rcon-console/blob/master/LICENSE.md)
 
 node-rcon is a simple library for connecting to RCON servers in node.js.
 It implements the protocol used by Valve's Source and GoldSrc engines,
