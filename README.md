@@ -1,12 +1,19 @@
-# node-rcon
+<span align="center">
 
+    
+
+[![terminal-icon](https://badgen.net/badge/icon/Rcon-Console?icon=terminal&label&scale=5&color=green)]()
+    
+[![version](https://badgen.net/npm/v/rcon-console?cache=300)](https://www.npmjs.com/package/rcon-console)
+[![downloads](https://badgen.net/npm/dt/rcon-console?cache=300&scale=1.15)](https://npmcharts.com/compare/rcon-console?minimal=true)
 [![license](https://badgen.net/github/license/rcon-console/rcon-console?cache=300)](https://github.com/bloomkd46/rcon-console/blob/master/LICENSE.md)
-
+###
+    
 node-rcon is a simple library for connecting to RCON servers in node.js.
 It implements the protocol used by Valve's Source and GoldSrc engines,
-as well as many other game servers.
+as well as many other game servers. It was originally created to connect to Minecraft's RCON server.
 
-It was originally created to connect to Minecraft's RCON server.
+</span>
 
 ## Installation
 
