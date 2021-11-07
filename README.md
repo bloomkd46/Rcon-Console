@@ -19,7 +19,7 @@ as well as many other game servers. It was originally created to connect to Mine
 
 npm:
 
-    $ npm install rcon
+    $ npm install -g rcon-console
 
 ## Usage
 
