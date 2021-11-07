@@ -1,6 +1,6 @@
 {
     "host": "localhost",
-    "port": "25575",
+    "port": 25575,
     "password": "password",
     "options": {
         "tcp": true,
