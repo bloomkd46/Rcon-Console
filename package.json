@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo test suceeded",
     "postversion": "npm publish",
-    "postpublish": "git branch v$(node rcon -V) && git push"
+    "postpublish": "git push"
   },
   "keywords": [
     "rcon",
@@ -27,7 +27,6 @@
     "commander": "^8.3.0",
     "ora": "^5.4.1",
     "rcon": "^1.1.0",
-    "rcon-console": "^1.0.2-0",
     "semver": "^7.3.5"
   },
   "repository": {
