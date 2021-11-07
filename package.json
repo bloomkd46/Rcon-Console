@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo test suceeded",
     "postversion": "npm publish",
-    "postpublish": "git branch '$(node rcon -V)' && git push"
+    "postpublish": "git branch v$(node rcon -V) && git push"
   },
   "keywords": [
     "rcon",
