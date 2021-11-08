@@ -2,7 +2,7 @@
 
     
 
-[![terminal-icon](https://badgen.net/badge/icon/Rcon-Console?icon=terminal&label&scale=5&color=green)]()
+[![terminal-icon](https://badgen.net/badge/icon/Rcon-Console?icon=terminal&label&scale=5&color=green)](README.md)
     
 [![version](https://badgen.net/npm/v/rcon-console?cache=300)](https://www.npmjs.com/package/rcon-console)
 [![downloads](https://badgen.net/npm/dt/rcon-console?cache=300&scale=1.15)](https://npmcharts.com/compare/rcon-console?minimal=true)
