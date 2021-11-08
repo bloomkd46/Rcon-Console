@@ -22,8 +22,8 @@ var authenticate = ora({ text: 'Authenticating...', discardStdin: false, color: 
 var command = ora({ text: "Something went wrong, please try again", discardStdin: false, color: "cyan" });
 var action = ora({ discardStdin: false, color: "green" });
 //var credentials = require('./credentials.json');
-var config = require('./config.json');
-const questions = require('./configuration_questions.json');
+var config = require('./lib/config.json');
+const questions = require('./lib/lock/configuration_questions.json');
 var question = 1;
 const { emit, stdin } = require('process');
 var authenticated = false;
@@ -246,7 +246,7 @@ function updateConfig() {
   action.start("Reseting configuration...");
   try {
     config.options.tcp = config.options.protocol.toLocaleLowerCase === "tcp" ? true : false;
-    fs.writeFileSync('./config.json', JSON.stringify(require('./default_config.json'), null, 2));
+    fs.writeFileSync('./lib/config.json', JSON.stringify(require('./lib/lock/default_config.json'), null, 2));
     action.succeed("configuration successfully reset");
     //this.action = 'reset';
   } catch (error) {
@@ -254,8 +254,8 @@ function updateConfig() {
   }
   action.start("Updating Configuration...");
   try {
-    fs.writeFileSync('./config.json', JSON.stringify(config, null, 2));
-    config = require('./config.json');
+    fs.writeFileSync('./lib/config.json', JSON.stringify(config, null, 2));
+    config = require('./lib/config.json');
     action.succeed("Successfully updated your configuration");
   } catch (error) {
     action.fail("Failed to update configuration, " + error);
