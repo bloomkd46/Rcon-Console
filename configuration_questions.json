@@ -1,8 +1,16 @@
 {
     "1": "host",
+    "1-description": "What host would you like to use?",
     "2": "port",
+    "2-description": "What port would you like to use?",
     "3": "password",
-    "4": "tcp",
-    "5": "challenge",
-    "6": "keepAlive"
+    "3-description": "What password would you like to use?",
+    "4": "keepAlive",
+    "4-description": "Enable keepAlive? (true/false)",
+    "5": "protocol",
+    "5-description":"What protocol would you like to use? (tcp/udp)",
+    "6": "challenge",
+    "6-description": "Would you like to use the challenge protocol? (true/false)",
+    "length": "6",
+    "options-after":"4"
 }

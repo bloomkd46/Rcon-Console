@@ -39,6 +39,7 @@ const { emit, stdin } = require('process');
 var authenticated = false;
 var queuedCommands = [];
 const program = new commander.Command();
+config.options.tcp = config.options.protocol.toLowerCase() === "tcp" ? true : false;
 const rcon = new Rcon(config.host, config.port, config.password, config.options);
 var configuring = false;
 class rconConsole {
@@ -55,14 +56,15 @@ class rconConsole {
           uninstall                        uninstall the program from your device
           rebuild                          rebuild rcon-console (use if crashing)
           update                           updates rcon-console
-          config                           update your config.json values
+          config                           view your config.json values
+          configure                        edit your config.json values
 
           See the wiki for help: https://github.com/bloomkd46/rcon-console/wiki
       `)
       .option('-H, --host <host>', 'This is the host that the Rcon will connect to (default: ' + config.host + ")", (p) => cache("host", p))
       .option('-P, --port <port>', 'This is the port that the Rcon connection will be established on (default: ' + config.port + ")", (p) => cache("port", p))
       .option('-p, --password <password>', 'specify the rcon password (default: ' + config.password + ")", (p) => cache("password", p))
-      .option('--tcp <true/false>', 'choose which rcon protocol to use, true for TCP and False for UDP (default: ' + config.options.tcp + ")", (p) => cache("options", p, "tcp"))
+      .option('--protocol <protocol>', 'choose which rcon protocol, TCP or UDP (default: ' + config.options.protocol + ")", (p) => cache("options", p.toLocaleLowerCase ? true : false, "tcp"))
       .option('-C, --challenge <true/false>', 'choose wether to use the rcon challenge protocal (default: ' + config.options.challenge + ")", (p) => cache("options", p, "challenge"))
       .option('-S, --save', 'save your port, host, and password to the config.json', () => updateConfig())
       .action((cmd) => {
@@ -126,8 +128,17 @@ class rconConsole {
         break;
       }
       case 'config': {
+        action.start("Loading configuration...");
+        try {
+          action.succeed(JSON.stringify(config, null, 2))
+        } catch (error) {
+          action.fail("Error loading configuration " + error)
+        }
+      }
+      break
+      case 'configure': {
         configuring = true;
-        action.info("what would you like to set the " + questions[question] + " to?");
+        action.info(questions[question + "-description"]);
         break;
       }
       default: {
@@ -137,6 +148,7 @@ class rconConsole {
           command.start(this.action);
           if (authenticated) rcon.send(this.action); else queuedCommands.push(this.action);
         }
+        break;
       }
     }
 
@@ -144,7 +156,19 @@ class rconConsole {
 
 }
 readline.on('line', (content) => {
-  if (question > 6 && configuring) { configuring = false; updateConfig(); authenticate.start("Authenticating..."); rcon.connect() }
+  if (configuring && question < questions.length) {
+    configure(question, content);
+    question++;
+  } else if (configuring) {
+    updateConfig();
+    configuring = false;
+    authenticate.start("Authenticating...");
+    rcon.connect();
+  } else {
+    command.start(content);
+    if (authenticated) rcon.send(content); else queuedCommands.push(content);
+  }
+  /*if (question > 6 && configuring) { configuring = false; updateConfig(); authenticate.start("Authenticating..."); rcon.connect() }
   if (configuring) {
     if (question > 3) {
       cache("options", content, questions[question + 1]);
@@ -157,10 +181,18 @@ readline.on('line', (content) => {
 
     }
     question++;
-  } else {
-    command.start(content);
-    if (authenticated) rcon.send(content); else queuedCommands.push(content);
-  }
+  }*/
+}).on('SIGINT', () => {
+  authenticate.start("Shutting Down...");
+  setTimeout(() => {
+    try {
+      rcon.disconnect();
+      authenticate.succeed("Successfully shut down");
+    } catch (error) {
+      authenticate.fail("Error while trying to shut down\n" + error);
+    }
+    process.exit(1);
+  }, 500);
 });
 
 rcon.on('auth', function () {
@@ -200,6 +232,7 @@ function cache(key, value, _key2) {
       config[key][_key2] = value;
       rcon[key + "." + _key2] = value;
       action.succeed("Successfully set " + key + "." + _key2 + " to " + value);
+      config.options.tcp = config.options.protocol.toLocaleLowerCase === "tcp" ? true : false;
     } else {
       config[key] = value;
       rcon[key] = value;
@@ -217,6 +250,7 @@ function cache(key, value, _key2) {
 function updateConfig() {
   action.start("Reseting configuration...");
   try {
+    config.options.tcp = config.options.protocol.toLocaleLowerCase === "tcp" ? true : false;
     fs.writeFileSync('./config.json', JSON.stringify(require('./default_config.json'), null, 2));
     action.succeed("configuration successfully reset");
     //this.action = 'reset';
@@ -231,6 +265,16 @@ function updateConfig() {
   } catch (error) {
     action.fail("Failed to update configuration, " + error);
   }
+}
+function configure(questionn, response) {
+
+  if (questionn > questions["options-after"]) {
+    cache("options", response, questions[questionn]);
+    config.options.tcp = config.options.protocol.toLocaleLowerCase === "tcp" ? true : false;
+  } else {
+    cache(questions[questionn], response);
+  }
+  action.info(questions[(questionn + 1) + "-description"]);
 }
 exports.rconConsole = rconConsole;
 function bootstrap() {
