@@ -5,7 +5,7 @@
   "options": {
     "protocol": "tcp",
     "protocol-notes": "options are tcp or udp (Case Insensitive)",
-    "tcp": null,
+    "tcp": true,
     "tcp-notes": "This will automaticly update based off of what protocol is configured to",
     "challenge": true,
     "challenge-notes": "true to use the challenge protocol (default true)"
