@@ -15,8 +15,9 @@ const semver = require('semver');
 const latestVersion = semver.clean(child_process.execSync('npm view rcon-console version').toString());
 const version = semver.clean(require('./package.json').version);
 const outOfDate = semver.gte(version, latestVersion);
-const versionDiff = semver.diff(verion, latestVersion);
+const versionDiff = semver.diff(version, latestVersion);
 const ora = require("ora");
+var versionHandler = ora({discardStdin: false, color: "red"});
 var authenticate = ora({ text: 'Authenticating...', discardStdin: false, color: "yellow" });
 var command = ora({ text: "Something went wrong, please try again", discardStdin: false, color: "cyan" });
 var action = ora({ discardStdin: false, color: "green" });
@@ -32,7 +33,12 @@ const rcon = new Rcon(config.host, config.port, config.password, config.options)
 var configuring = false;
 class rconConsole {
   constructor() {
-    if (outOfDate) console.log('you are a' + versionDiff + 'version behind, run `rcon update` to update to version ' + latestVersion);
+    versionHandler.start("Checking for updates...");
+    try {
+      if (outOfDate) versionHandler('you are a' + versionDiff + 'version behind, run `rcon update` to update to version ' + latestVersion);
+    } catch (error) {
+      versionHandler("Error while checking for updates\n"+ error);
+    }
     commander
       .showHelpAfterError()
       .showSuggestionAfterError()
