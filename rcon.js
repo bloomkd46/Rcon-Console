@@ -12,21 +12,10 @@ const readline = require('readline').createInterface({
 });
 const fs = require('fs');
 const semver = require('semver');
-var outOfDate;
-var latestVersion;
-const version = require('./package.json').version;
-const checkForUpdates = child_process.execSync('npm view rcon-console version', (error, stdout) => {
-  if (error) {
-    return error;
-  } else if (semver.gte(semver.clean(version), semver.clean(stdout))) {
-    outOfDate = false;
-  } else {
-    outOfDate = true;
-    console.log('you are a %s version behind, run `rcon update` to update', semver.diff(semver.clean(version), semver.clean(stdout)));
-  }
-  latestVersion = semver.clean(stdout);
-});
-
+const latestVersion = semver.clean(child_process.execSync('npm view rcon-console version').toString());
+const version = semver.clean(require('./package.json').version);
+const outOfDate = semver.gte(version, latestVersion);
+const versionDiff = semver.diff(verion, latestVersion);
 const ora = require("ora");
 var authenticate = ora({ text: 'Authenticating...', discardStdin: false, color: "yellow" });
 var command = ora({ text: "Something went wrong, please try again", discardStdin: false, color: "cyan" });
@@ -38,12 +27,12 @@ var question = 1;
 const { emit, stdin } = require('process');
 var authenticated = false;
 var queuedCommands = [];
-const program = new commander.Command();
 config.options.tcp = config.options.protocol.toLowerCase() === "tcp" ? true : false;
 const rcon = new Rcon(config.host, config.port, config.password, config.options);
 var configuring = false;
 class rconConsole {
   constructor() {
+    if (outOfDate) console.log('you are a' + versionDiff + 'version behind, run `rcon update` to update to version ' + latestVersion);
     commander
       .showHelpAfterError()
       .showSuggestionAfterError()
@@ -135,7 +124,7 @@ class rconConsole {
           action.fail("Error loading configuration " + error)
         }
       }
-      break
+        break
       case 'configure': {
         configuring = true;
         action.info(questions[question + "-description"]);
