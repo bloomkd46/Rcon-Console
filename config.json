@@ -1,11 +1,12 @@
 {
   "host": "localhost",
-  "port": 25575,
+  "port": "25575",
   "password": "password",
   "options": {
     "tcp": true,
     "tcp-notes": "false for UDP, true for TCP (default true)",
-    "challenge": true,
+    "challenge": "true",
     "challenge-notes": "true to use the challenge protocol (default true)"
-  }
+  },
+  "keepAlive": true
 }

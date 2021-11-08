@@ -34,7 +34,7 @@ var action = ora({ discardStdin: false, color: "green" });
 //var credentials = require('./credentials.json');
 var config = require('./config.json');
 const questions = require('./configuration_questions.json');
-var question = 0;
+var question = 1;
 const { emit, stdin } = require('process');
 var authenticated = false;
 var queuedCommands = [];
@@ -75,6 +75,7 @@ class rconConsole {
         try {
           fs.writeFileSync('./config.json', JSON.stringify(require('./default_config.json'), null, 2));
           action.succeed("configuration successfully reset");
+          //this.action = 'reset';
         } catch (error) {
           action.fail("Error: Unable to reset configuration\n" + error);
         }
@@ -126,7 +127,7 @@ class rconConsole {
       }
       case 'config': {
         configuring = true;
-        action.info("what would you like to set the "+ questions[question+1] + " to?");
+        action.info("what would you like to set the " + questions[question] + " to?");
         break;
       }
       default: {
@@ -143,19 +144,19 @@ class rconConsole {
 
 }
 readline.on('line', (content) => {
+  if (question > 6 && configuring) { configuring = false; updateConfig(); authenticate.start("Authenticating..."); rcon.connect() }
   if (configuring) {
-    if (question > 5) { updateConfig(); process.exit(1); }
-    if (question >= 4) {
-      question++;
-      cache("options", content, questions[question+1]);
-      if (question == 5) action.info("would you like to use the challeng protocal? (true/false)");
+    if (question > 3) {
+      cache("options", content, questions[question + 1]);
+      if (question == 5) {
+        action.info("Would you like to enable keepAlive? (true/false)");
+      } else if (question == 4) action.info("would you like to use the challenge protocal? (true/false)");
     } else {
-      question++;
       cache(questions[question], content);
-      if (question == 4) action.info("would you like to use TCP or UDP? (true for TCP, false for UDP)");
-      action.info("what would you like to set the "+ questions[question+1] + " to?");
+      if (question == 3) action.info("would you like to use TCP or UDP? (true for TCP, false for UDP)"); else action.info("what would you like to set the " + questions[question + 1] + " to?");
+
     }
-    console.log(questions[question + 1]);
+    question++;
   } else {
     command.start(content);
     if (authenticated) rcon.send(content); else queuedCommands.push(content);
@@ -185,9 +186,12 @@ rcon.on('auth', function () {
 }).on('end', function () {
   console.log("Connection closed, Reconnecting...");
   authenticated = false;
-  authenticate.start("Authenticating...");
-  rcon.connect();
-  //process.exit();
+  if (config.keepAlive) {
+    authenticate.start("Authenticating...");
+    rcon.connect();
+  } else {
+    process.exit(1);
+  }
 });
 function cache(key, value, _key2) {
   action.start("Setting " + key + " to " + value);
@@ -195,7 +199,7 @@ function cache(key, value, _key2) {
     if (_key2) {
       config[key][_key2] = value;
       rcon[key + "." + _key2] = value;
-      action.succeed("Successfully set " + key + " to " + value);
+      action.succeed("Successfully set " + key + "." + _key2 + " to " + value);
     } else {
       config[key] = value;
       rcon[key] = value;
@@ -211,12 +215,19 @@ function cache(key, value, _key2) {
 
 }
 function updateConfig() {
-  //config.host = "10.0.0.5";
+  action.start("Reseting configuration...");
+  try {
+    fs.writeFileSync('./config.json', JSON.stringify(require('./default_config.json'), null, 2));
+    action.succeed("configuration successfully reset");
+    //this.action = 'reset';
+  } catch (error) {
+    action.fail("Error: Unable to reset configuration\n" + error);
+  }
   action.start("Updating Configuration...");
   try {
     fs.writeFileSync('./config.json', JSON.stringify(config, null, 2));
     config = require('./config.json');
-    action.succeed("Successfully updated configuration");
+    action.succeed("Successfully updated your configuration");
   } catch (error) {
     action.fail("Failed to update configuration, " + error);
   }
