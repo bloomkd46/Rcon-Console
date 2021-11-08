@@ -6,7 +6,7 @@
     
 [![version](https://badgen.net/npm/v/rcon-console?cache=300)](https://www.npmjs.com/package/rcon-console)
 [![downloads](https://badgen.net/npm/dt/rcon-console?cache=300&scale=1.15)](https://npmcharts.com/compare/rcon-console?minimal=true)
-[![license](https://badgen.net/github/license/micromatch/micromatch)](https://github.com/bloomkd46/rcon-console/blob/master/LICENSE.md)
+[![license](https://badgen.net/github/license/bloomkd46/rcon-console)](https://github.com/bloomkd46/rcon-console/blob/master/LICENSE.md)
 ###
     
 node-rcon is a simple library for connecting to RCON servers in node.js.
