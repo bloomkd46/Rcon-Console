@@ -19,35 +19,19 @@ as well as many other game servers. It was originally created to connect to Mine
 
 npm:
 Make sure that you are running node.js 12.20.0 or newer (`node -v`)
-```shell
+```bash
 npm install -g rcon-console
 ```
 ## Usage
-
-See [`examples/basic.js`](https://github.com/pushrax/node-rcon/blob/master/examples/basic.js) for a simple example, or
-[`examples/stdio.js`](https://github.com/pushrax/node-rcon/blob/master/examples/stdio.js) for a complete command line client.
-
-### Commands And Options
-| Command | Description |
-| :-|- |
-| help | Display the help menu|
-| 
-
-Here's a non-exhaustive list of which games use which options:
-
-| Game              | Protocol  | Challenge |
-| :---------------- | :-------- | :-------- |
-| Any Source game   | TCP       | N/A       |
-| Minecraft         | TCP       | N/A       |
-| Any GoldSrc game  | UDP       | Yes       |
-| Call of Duty      | UDP       | No        |
-
-Source games include CS:S, CS:GO, TF2, etc. GoldSrc games include CS 1.6, TFC,
-Ricochet (lol), etc.
-
-If there's a game you know uses a certain protocol, feel free to submit a pull
-request.
-
+to get started run 
+```bash
+rcon
+```
+this will connect to localhost:25575 with a password of `password`
+### Configuration
+to change you config run `rcon config`
+then either press enter to use the default value or type in what you want to change the value to.
+#
 Please submit a bug report for any game you try that doesn't work!
 
 Note that some servers may close the connection if it is idle for a long period of time.
