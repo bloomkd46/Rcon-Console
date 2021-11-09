@@ -38,7 +38,13 @@ class rconConsole {
   constructor() {
     versionHandler.start("Checking for updates...");
     try {
-      if (versionDiff != null) versionHandler.warn('you are a' + versionDiff + ' version behind, run `rcon update` to update to version ' + latestVersion); else versionHandler.succeed("You are up-to-date with version " + version)
+      if (outOfDate) {
+        if (versionDiff == "prerelease" && config.betaUpdates) {
+          versionHandler.warn('you are a' + versionDiff + ' version behind, run `rcon update` to update to version ' + latestVersion);
+        } else {
+          versionHandler.warn('you are a' + versionDiff + ' version behind, run `rcon update` to update to version ' + latestVersion);
+        }
+      }
     } catch (error) {
       versionHandler.fail("Error while checking for updates\n" + error);
     }
@@ -275,7 +281,7 @@ function configure(questionn, response) {
   } else {
     cache(questions[questionn], response != "" ? response : defaultConfig[questions[questionn]]);
   }
-  action.info(questions[(questionn + 1) + "-description"] + " (default: " + defaultConfig[questions[questionn+1]] + ")");
+  action.info(questions[(questionn + 1) + "-description"] + " (default: " + defaultConfig[questions[questionn + 1]] + ")");
 }
 function addConfig() {
   action.start("Adding configuration...");
