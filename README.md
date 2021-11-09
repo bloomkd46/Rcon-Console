@@ -31,7 +31,7 @@ this will connect to `localhost:25575` with a password of `password` and run com
 ## Configuration
 to change you config run `rcon config edit`
 then either press enter to use the default value or type in what you want to change the value to.
-for more options see [configuration](/wiki#Configuration)
+for more options see [configuration](../../wiki#Configuration)
 
 #### Please submit a bug report for any game you try that doesn't work!
 #### Note that some servers may close the connection if it is idle for a long period of time. enable keepAlive in your config to fix this.
