@@ -23,6 +23,7 @@ var command = ora({ text: "Something went wrong, please try again", discardStdin
 var action = ora({ discardStdin: false, color: "green" });
 //var credentials = require('./credentials.json');
 var actionArguments;
+const defaultConfig = require('./lib/lock/default_config.json');
 var configExists = fs.existsSync('./lib/config.json');
 var config = configExists ? require('./lib/config.json') : addConfig();
 const questions = require('./lib/lock/configuration_questions.json');
@@ -45,10 +46,11 @@ class rconConsole {
       .showHelpAfterError()
       .showSuggestionAfterError()
       .version(version)
-      .arguments('[reset|uninstall|rebuild|help|config [option]]')
+      .arguments('reset|uninstall|rebuild|help|config [option]|[command]')
       .addHelpText('after', `
       Please provide a command:
 
+          [command]                        command to run once connected (put qotations if more than two words)
           uninstall                        uninstall the program from your device
           rebuild                          rebuild rcon-console (use if crashing)
           update                           updates rcon-console
@@ -116,10 +118,11 @@ class rconConsole {
         break;
       }
       case 'config': {
-        if(actionArguments === "edit"){
+        if (actionArguments === "edit") {
           configuring = true;
-          action.info(questions[question + "-description"]);
-        } else if(actionArguments === "reset"){
+          action.info("Entering configuration mode, type nothing to use the default value");
+          action.info(questions[question + "-description"] + " (default: " + defaultConfig[questions[question]] + ")");
+        } else if (actionArguments === "reset") {
           action.start("Reseting configuration...");
           try {
             fs.writeFileSync('./lib/config.json', JSON.stringify(require('./lib/lock/default_config.json'), null, 2));
@@ -128,7 +131,7 @@ class rconConsole {
             action.fail("Error: Unable to reset configuration\n" + error);
           }
           process.exit(0);
-        }else{
+        } else {
           action.start("Loading configuration...");
           try {
             action.succeed(JSON.stringify(config, null, 2))
@@ -142,8 +145,8 @@ class rconConsole {
         authenticate.start("Authenticating...");
         rcon.connect();
         if (this.action) {
-          command.start(this.action);
-          if (authenticated) rcon.send(this.action); else queuedCommands.push(this.action);
+          command.start(actionArguments != null ? this.action + " " + actionArguments : this.action);
+          if (authenticated) rcon.send(actionArguments != null ? this.action + " " + actionArguments : this.action); else queuedCommands.push(actionArguments != null ? this.action + " " + actionArguments : this.action);
         }
         break;
       }
@@ -153,6 +156,7 @@ class rconConsole {
 
 }
 readline.on('line', (content) => {
+  //console.log(`Received: ${content}`);
   if (configuring && question < questions.length) {
     configure(question, content);
     question++;
@@ -266,12 +270,12 @@ function updateConfig() {
 function configure(questionn, response) {
 
   if (questionn > questions["options-after"]) {
-    cache("options", response, questions[questionn]);
+    cache("options", response != " " ? response : defaultConfig[questionn], questions[questionn]);
     config.options.tcp = config.options.protocol.toLocaleLowerCase === "tcp" ? true : false;
   } else {
-    cache(questions[questionn], response);
+    cache(questions[questionn], response != "" ? response : defaultConfig[questions[questionn]]);
   }
-  action.info(questions[(questionn + 1) + "-description"]);
+  action.info(questions[(questionn + 1) + "-description"] + " (default: " + defaultConfig[questions[questionn+1]] + ")");
 }
 function addConfig() {
   action.start("Adding configuration...");
