@@ -25,11 +25,11 @@ npm install -g rcon-console
 ## Usage
 here are some example commands (if the command is more than 2 words surrond with `""`'s)
 ```bash
-rcon
-rcon summon lightning_bolt
-rcon "summon lightning_bolt ~ ~ ~"
+rcon #This will connect without auto-executing any commands
+rcon summon lightning_bolt #This will run `summon lightning_bolt` once connected
+rcon "summon lightning_bolt ~ ~ ~" #This will run `summon lightning_bolt ~ ~ ~` once connected
 ```
-this will connect to `localhost:25575` with a password of `password` and run command `summon lightning_bolt`
+this will connect to `localhost:25575` with a password of `password`
 for more commands and options see the [wiki](../../wiki#Rcon-Console)
 ## Configuration
 to change you config run `rcon config edit`
