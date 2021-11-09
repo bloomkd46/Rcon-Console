@@ -27,7 +27,7 @@ to get started run
 ```bash
 rcon
 ```
-this will connect to localhost:25575 with a password of `password`
+this will connect to `localhost:25575` with a password of `password`
 ### Configuration
 to change you config run `rcon config`
 then either press enter to use the default value or type in what you want to change the value to.
