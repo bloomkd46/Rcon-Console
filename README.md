@@ -23,9 +23,11 @@ Make sure that you are running node.js 12.20.0 or newer (`node -v`)
 npm install -g rcon-console
 ```
 ## Usage
-to get started run 
+here are some example commands (if the command is more than 2 words surrond with `""`'s)
 ```bash
+rcon
 rcon summon lightning_bolt
+rcon "summon lightning_bolt ~ ~ ~"
 ```
 this will connect to `localhost:25575` with a password of `password` and run command `summon lightning_bolt`
 for more commands and options see the [wiki](../../wiki#Rcon-Console)
