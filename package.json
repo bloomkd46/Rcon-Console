@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo test suceeded",
     "postversion": "npm publish",
-    "postpublish": "git push"
+    "postpublish": "git push",
+    "postinstall": "printf 'Thank you for installing Rcon-Console!\nTo get started run `rcon help`\nfor more options visit https://github.com/bloomkd46/rcon-console/wiki\n'"
   },
   "keywords": [
     "rcon",

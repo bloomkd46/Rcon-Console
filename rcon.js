@@ -14,15 +14,17 @@ const fs = require('fs');
 const semver = require('semver');
 const latestVersion = semver.clean(child_process.execSync('npm view rcon-console version').toString());
 const version = semver.clean(require('./package.json').version);
-const outOfDate = semver.gte(version, latestVersion);
+const outOfDate = semver.lt(version, latestVersion);
 const versionDiff = semver.diff(version, latestVersion);
 const ora = require("ora");
-var versionHandler = ora({discardStdin: false, color: "red"});
+var versionHandler = ora({ discardStdin: false, color: "red" });
 var authenticate = ora({ text: 'Authenticating...', discardStdin: false, color: "yellow" });
 var command = ora({ text: "Something went wrong, please try again", discardStdin: false, color: "cyan" });
 var action = ora({ discardStdin: false, color: "green" });
 //var credentials = require('./credentials.json');
-var config = require('./lib/config.json');
+var actionArguments;
+var configExists = fs.existsSync('./lib/config.json');
+var config = configExists ? require('./lib/config.json') : addConfig();
 const questions = require('./lib/lock/configuration_questions.json');
 var question = 1;
 const { emit, stdin } = require('process');
@@ -35,24 +37,24 @@ class rconConsole {
   constructor() {
     versionHandler.start("Checking for updates...");
     try {
-      if (outOfDate) versionHandler('you are a' + versionDiff + 'version behind, run `rcon update` to update to version ' + latestVersion);
+      if (versionDiff != null) versionHandler.warn('you are a' + versionDiff + ' version behind, run `rcon update` to update to version ' + latestVersion); else versionHandler.succeed("You are up-to-date with version " + version)
     } catch (error) {
-      versionHandler("Error while checking for updates\n"+ error);
+      versionHandler.fail("Error while checking for updates\n" + error);
     }
     commander
       .showHelpAfterError()
       .showSuggestionAfterError()
       .version(version)
-      .arguments('[reset|uninstall|rebuild|help|config]')
+      .arguments('[reset|uninstall|rebuild|help|config [option]]')
       .addHelpText('after', `
       Please provide a command:
 
-          reset                            resets the configuration
           uninstall                        uninstall the program from your device
           rebuild                          rebuild rcon-console (use if crashing)
           update                           updates rcon-console
-          config                           view your config.json values
-          configure                        edit your config.json values
+          config                           view your config.json
+          config edit                      edit your config.json
+          config reset                     reset your the configuration
 
           See the wiki for help: https://github.com/bloomkd46/rcon-console/wiki
       `)
@@ -62,22 +64,13 @@ class rconConsole {
       .option('--protocol <protocol>', 'choose which rcon protocol, TCP or UDP (default: ' + config.options.protocol + ")", (p) => cache("options", p.toLocaleLowerCase ? true : false, "tcp"))
       .option('-C, --challenge <true/false>', 'choose wether to use the rcon challenge protocal (default: ' + config.options.challenge + ")", (p) => cache("options", p, "challenge"))
       .option('-S, --save', 'save your port, host, and password to the config.json', () => updateConfig())
-      .action((cmd) => {
+      .action((cmd, cmdArgs) => {
+        console.log(cmd);
         this.action = cmd;
+        actionArguments = cmdArgs;
       })
       .parse();
     switch (this.action) {
-      case 'reset': {
-        action.start("Reseting configuration...");
-        try {
-          fs.writeFileSync('./config.json', JSON.stringify(require('./default_config.json'), null, 2));
-          action.succeed("configuration successfully reset");
-          //this.action = 'reset';
-        } catch (error) {
-          action.fail("Error: Unable to reset configuration\n" + error);
-        }
-        process.exit(1);
-      }
       case 'uninstall': {
         action.start("Uninstalling...");
         child_process.exec('npm uninstall rcon-console', (error) => {
@@ -123,17 +116,26 @@ class rconConsole {
         break;
       }
       case 'config': {
-        action.start("Loading configuration...");
-        try {
-          action.succeed(JSON.stringify(config, null, 2))
-        } catch (error) {
-          action.fail("Error loading configuration " + error)
+        if(actionArguments === "edit"){
+          configuring = true;
+          action.info(questions[question + "-description"]);
+        } else if(actionArguments === "reset"){
+          action.start("Reseting configuration...");
+          try {
+            fs.writeFileSync('./lib/config.json', JSON.stringify(require('./lib/lock/default_config.json'), null, 2));
+            action.succeed("configuration successfully reset");
+          } catch (error) {
+            action.fail("Error: Unable to reset configuration\n" + error);
+          }
+          process.exit(0);
+        }else{
+          action.start("Loading configuration...");
+          try {
+            action.succeed(JSON.stringify(config, null, 2))
+          } catch (error) {
+            action.fail("Error loading configuration " + error)
+          }
         }
-      }
-        break
-      case 'configure': {
-        configuring = true;
-        action.info(questions[question + "-description"]);
         break;
       }
       default: {
@@ -270,6 +272,16 @@ function configure(questionn, response) {
     cache(questions[questionn], response);
   }
   action.info(questions[(questionn + 1) + "-description"]);
+}
+function addConfig() {
+  action.start("Adding configuration...");
+  try {
+    fs.writeFileSync('./lib/config.json', JSON.stringify(require('./lib/lock/default_config.json'), null, 2));
+    action.succeed("configuration successfully added");
+    return require('./lib/config.json');
+  } catch (error) {
+    action.fail("Error: Unable to add configuration\n" + error);
+  }
 }
 exports.rconConsole = rconConsole;
 function bootstrap() {

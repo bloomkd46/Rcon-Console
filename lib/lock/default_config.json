@@ -10,5 +10,6 @@
         "challenge": true,
         "challenge-notes": "true to use the challenge protocol (default true)"
     },
-    "keepAlive": true
+    "keepAlive": true,
+    "betaUpdates": false
 }

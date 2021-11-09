@@ -7,10 +7,12 @@
     "3-description": "What password would you like to use?",
     "4": "keepAlive",
     "4-description": "Enable keepAlive? (true/false)",
-    "5": "protocol",
-    "5-description":"What protocol would you like to use? (tcp/udp)",
-    "6": "challenge",
-    "6-description": "Would you like to use the challenge protocol? (true/false)",
-    "length": "6",
-    "options-after":"4"
+    "5": "betaUpdates",
+    "5-description": "enable beta updates?",
+    "6": "protocol",
+    "6-description":"What protocol would you like to use? (tcp/udp)",
+    "7": "challenge",
+    "7-description": "Would you like to use the challenge protocol? (true/false)",
+    "length": "7",
+    "options-after":"5"
 }
