@@ -28,6 +28,7 @@ to get started run
 rcon summon lightning_bolt
 ```
 this will connect to `localhost:25575` with a password of `password` and run command `summon lightning_bolt`
+for more commands and options see the [wiki](../../wiki#Rcon-Console)
 ## Configuration
 to change you config run `rcon config edit`
 then either press enter to use the default value or type in what you want to change the value to.
