@@ -46,7 +46,7 @@ class rconConsole {
       .showHelpAfterError()
       .showSuggestionAfterError()
       .version(version)
-      .arguments('reset|uninstall|rebuild|help|config [option]|[command]')
+      .arguments('[reset|uninstall|rebuild|help|config]')
       .addHelpText('after', `
       Please provide a command:
 
