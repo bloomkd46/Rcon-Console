@@ -18,7 +18,8 @@ as well as many other game servers. It was originally created to connect to Mine
 ## Installation
 
 npm:
-Make sure that you are running node.js 12.20.0 or newer (`node -v`)
+> Make sure that you are running [node.js](https://nodejs.org/en/download/) 12.20.0 or newer (`node -v`)
+
 ```bash
 npm install -g rcon-console
 ```
@@ -30,11 +31,15 @@ rcon summon lightning_bolt #This will run `summon lightning_bolt` once connected
 rcon "summon lightning_bolt ~ ~ ~" #This will run `summon lightning_bolt ~ ~ ~` once connected
 ```
 this will connect to `localhost:25575` with a password of `password`
+
 for more commands and options see the [wiki](../../wiki#Rcon-Console)
 ## Configuration
 to change you config run `rcon config edit`
+
 then either press enter to use the default value or type in what you want to change the value to.
+
 for more options see [configuration](../../wiki#Configuration)
 
 > Please submit a [bug report](../../issues/new/choose) for any game you try that doesn't work!
+
 > Note that some servers may close the connection if it is idle for a long period of time. enable keepAlive in your config to fix this.
